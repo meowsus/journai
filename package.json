@@ -9,7 +9,7 @@
     "lint": "next lint",
     "prettier:write": "prettier --write .",
     "prettier:check": "prettier --check .",
-    "prisma:migrate:dev": "prisma migrate dev --name"
+    "prisma:migrate:dev": "prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "6.1.0",
