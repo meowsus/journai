@@ -9,6 +9,6 @@
     "editor.formatOnSave": true,
     "editor.tabSize": 2,
     "cSpell.words": ["Journai", "journaling"],
-    "typescript.preferences.importModuleSpecifier": "project-relative",
+    "typescript.preferences.importModuleSpecifier": "non-relative",
   },
 }
