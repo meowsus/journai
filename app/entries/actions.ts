@@ -1,30 +1,38 @@
 "use server";
 
+import { EntryFormSchema } from "@/components/EntryForm/schema";
 import { createEntry } from "@/db/entry";
-import { EntryFormSchema, EntryFormSchemaType } from "@/schemas/entryForm";
-import { ActionResponse } from "@/types/actions";
-import { Entry } from "@prisma/client";
+import { redirect } from "next/navigation";
+
+interface FormState {
+  message: string;
+  error?: boolean;
+  fields?: Record<string, string>;
+  issues?: string[];
+}
 
 export async function createEntryAction(
-  data: EntryFormSchemaType,
-): Promise<ActionResponse<Entry>> {
-  const result = EntryFormSchema.safeParse(data);
+  prevState: FormState,
+  data: FormData,
+): Promise<FormState> {
+  const formData = Object.fromEntries(data);
+  const parsed = EntryFormSchema.safeParse(formData);
 
-  if (!result.success) {
+  if (!parsed.success) {
     return {
-      error: true,
-      message: result.error.issues.map((issue) => issue.message).join(", "),
+      message: "Validation failed",
     };
   }
 
   try {
-    const entry = await createEntry(data);
-    return { data: entry };
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      return { error: true, message: error.message };
-    } else {
-      return { error: true, message: "An unknown error occurred" };
-    }
+    await createEntry(parsed.data);
+  } catch (error) {
+    console.error(error);
+
+    return {
+      message: "Failed to add entry",
+    };
   }
+
+  redirect("/entries");
 }
