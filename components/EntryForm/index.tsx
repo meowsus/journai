@@ -1,9 +1,9 @@
 "use client";
 
-import { createEntryAction } from "@/app/entries/actions";
+import { createEntryFormAction } from "@/app/entries/actions";
 import {
-  EntryFormOutput,
-  EntryFormSchema,
+  CreateEntryFormOutput,
+  CreateEntryFormSchema,
 } from "@/components/EntryForm/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActionState, useEffect } from "react";
@@ -11,25 +11,24 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 export default function EntryForm() {
-  const [state, formAction, isPending] = useActionState(createEntryAction, {
-    message: "",
+  const [state, formAction, isPending] = useActionState(createEntryFormAction, {
+    errorMessage: "",
   });
 
-  const form = useForm<EntryFormOutput>({
+  const form = useForm<CreateEntryFormOutput>({
     mode: "onChange",
-    resolver: zodResolver(EntryFormSchema),
+    resolver: zodResolver(CreateEntryFormSchema),
     defaultValues: {
       title: "",
       content: "",
-      ...(state?.fields ?? {}),
     },
   });
 
   useEffect(() => {
-    if (state.message) {
-      toast(state.message);
+    if (state.errorMessage) {
+      toast.error(state.errorMessage);
     }
-  }, [state.message]);
+  }, [state.errorMessage]);
 
   return (
     <form
@@ -77,18 +76,8 @@ export default function EntryForm() {
         {isPending ? "Adding..." : "Add"}
       </button>
 
-      {state.error && state.message && (
-        <div className="text-error">
-          {state.message}
-
-          {state.issues && (
-            <ul>
-              {state.issues.map((issue) => (
-                <li key={issue}>{issue}</li>
-              ))}
-            </ul>
-          )}
-        </div>
+      {state.errorMessage && (
+        <div className="text-error">{state.errorMessage}</div>
       )}
     </form>
   );

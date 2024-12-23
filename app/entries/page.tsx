@@ -1,3 +1,4 @@
+import DeleteEntryButton from "@/app/entries/DeleteEntryForm";
 import { getAllEntries } from "@/db/entry";
 
 export default async function Home() {
@@ -16,6 +17,7 @@ export default async function Home() {
       {entries.map((entry) => (
         <div key={entry.id}>
           {entry.title}: {entry.content}
+          <DeleteEntryButton entryId={entry.id} />
         </div>
       ))}
     </div>

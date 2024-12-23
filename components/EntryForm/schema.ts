@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const EntryFormSchema = z.object({
+export const CreateEntryFormSchema = z.object({
   title: z.string().trim().min(1, {
     message: "Title is required",
   }),
@@ -9,4 +9,10 @@ export const EntryFormSchema = z.object({
   }),
 });
 
-export type EntryFormOutput = z.output<typeof EntryFormSchema>;
+export type CreateEntryFormOutput = z.output<typeof CreateEntryFormSchema>;
+
+export const DeleteEntryFormSchema = z.object({
+  entryId: z.string(),
+});
+
+export type DeleteEntryFormOutput = z.output<typeof DeleteEntryFormSchema>;
