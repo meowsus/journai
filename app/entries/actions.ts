@@ -3,7 +3,7 @@
 import {
   DeleteEntryFormSchema,
   EntryFormSchema,
-} from "@/components/EntryForm/schema";
+} from "@/components/entries/EntryForm/schema";
 import { createEntry, deleteEntry, updateEntry } from "@/db/entry";
 import { redirect } from "next/navigation";
 

@@ -1,4 +1,4 @@
-import DeleteEntryButton from "@/app/entries/DeleteEntryForm";
+import DeleteEntryButton from "@/components/entries/DeleteEntryForm";
 import { getAllEntries } from "@/db/entry";
 import Link from "next/link";
 

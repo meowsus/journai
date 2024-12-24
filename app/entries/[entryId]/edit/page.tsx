@@ -1,4 +1,4 @@
-import EntryForm from "@/components/EntryForm";
+import EntryForm from "@/components/entries/EntryForm";
 import { getEntry } from "@/db/entry";
 import { notFound } from "next/navigation";
 

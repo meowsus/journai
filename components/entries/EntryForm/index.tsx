@@ -1,7 +1,7 @@
 "use client";
 
 import { saveEntryFormAction } from "@/app/entries/actions";
-import { EntryFormSchema } from "@/components/EntryForm/schema";
+import { EntryFormSchema } from "@/components/entries/EntryForm/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Entry } from "@prisma/client";
 import { useActionState, useEffect } from "react";
