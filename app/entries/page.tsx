@@ -1,15 +1,61 @@
-import DeleteEntryButton from "@/components/entries/DeleteEntryForm";
-import { getAllEntries } from "@/db/entry";
-import { formatDate } from "date-fns";
+import { countEntries, getEntriesByCreatedAt } from "@/db/entry";
+import { add, endOfMonth, formatDate, startOfMonth, sub } from "date-fns";
 import Link from "next/link";
 
-export default async function EntriesPage() {
-  const entries = await getAllEntries();
+interface EntriesPageProps {
+  searchParams?: Promise<{
+    startsAt: string;
+    endsAt: string;
+  }>;
+}
+
+export default async function EntriesPage({ searchParams }: EntriesPageProps) {
+  const entryCount = await countEntries();
+
+  if (entryCount === 0) {
+    return (
+      <div className="hero bg-base-200 min-h-screen">
+        <div className="hero-content text-center">
+          <div className="max-w-lg">
+            <h1 className="text-5xl font-bold">No entries found</h1>
+            <p className="py-6">
+              We&apos;ll need to create some entries before we can show them
+              here.
+            </p>
+            <Link href="/entries/new" className="btn btn-primary">
+              Create your first entry
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const now = new Date();
+
+  const { startsAt: startsAtParam, endsAt: endsAtParam } =
+    (await searchParams) || {};
+
+  const startsAt = startsAtParam ? new Date(startsAtParam) : startOfMonth(now);
+  const endsAt = endsAtParam ? new Date(endsAtParam) : endOfMonth(startsAt);
+
+  const entries = await getEntriesByCreatedAt(startsAt, endsAt);
 
   if (entries.length === 0) {
     return (
-      <div>
-        <div>No entries found</div>
+      <div className="hero bg-base-200 min-h-screen">
+        <div className="hero-content text-center">
+          <div className="max-w-lg">
+            <h1 className="text-5xl font-bold">No entries found</h1>
+            <p className="py-6">
+              We couldn&apos;t find any entries for{" "}
+              {formatDate(startsAt, "MMMM yyyy")}
+            </p>
+            <Link href="/entries" className="btn btn-primary">
+              Back to the present
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
@@ -17,7 +63,9 @@ export default async function EntriesPage() {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between gap-2">
-        <h1 className="text-4xl mb-2">Entries</h1>
+        <h1 className="text-4xl mb-2">
+          Entries for {formatDate(startsAt, "MMMM yyyy")}
+        </h1>
 
         <div className="flex items-center gap-2">
           <Link href="/entries/new" className="btn btn-sm btn-primary">
@@ -25,6 +73,19 @@ export default async function EntriesPage() {
           </Link>
         </div>
       </div>
+
+      <Link
+        href={{
+          pathname: "/entries",
+          query: {
+            startsAt: sub(startsAt, { months: 1 }).toISOString(),
+            endsAt: sub(endsAt, { months: 1 }).toISOString(),
+          },
+        }}
+        className="btn btn-sm btn-ghost"
+      >
+        Previous month
+      </Link>
 
       <ul className="timeline timeline-vertical timeline-compact">
         {entries.map((entry, index) => (
@@ -62,19 +123,19 @@ export default async function EntriesPage() {
           </li>
         ))}
       </ul>
-    </div>
-  );
 
-  return (
-    <div>
-      {entries.map((entry) => (
-        <div key={entry.id}>
-          <Link className="link" href={`/entries/${entry.id}`}>
-            {entry.title}: {entry.content}
-          </Link>
-          <DeleteEntryButton entryId={entry.id} />
-        </div>
-      ))}
+      <Link
+        href={{
+          pathname: "/entries",
+          query: {
+            startsAt: add(startsAt, { months: 1 }).toISOString(),
+            endsAt: add(endsAt, { months: 1 }).toISOString(),
+          },
+        }}
+        className="btn btn-sm btn-ghost"
+      >
+        Next month
+      </Link>
     </div>
   );
 }

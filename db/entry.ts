@@ -1,8 +1,22 @@
 import prisma from "@/prisma/client";
 import { Prisma } from "@prisma/client";
 
-export const getAllEntries = async () => {
-  return await prisma.entry.findMany();
+export const countEntries = async () => {
+  return await prisma.entry.count();
+};
+
+export const getEntriesByCreatedAt = (startsAt: Date, endsAt: Date) => {
+  return prisma.entry.findMany({
+    where: {
+      createdAt: {
+        gte: startsAt,
+        lt: endsAt,
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 };
 
 export const getEntry = async (id: number) => {

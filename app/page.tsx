@@ -1,10 +1,8 @@
-import { getAllEntries } from "@/db/entry";
+import { countEntries } from "@/db/entry";
 import Link from "next/link";
 
 export default async function Home() {
-  const entries = await getAllEntries();
-
-  const hasEntries = entries.length > 0;
+  const entryCount = await countEntries();
 
   return (
     <div className="hero bg-base-200 min-h-screen">
@@ -17,7 +15,7 @@ export default async function Home() {
             my own journaling practice, but off-loads the work of summarizing
             previous posts to a locally running AI model.
           </p>
-          {hasEntries ? (
+          {entryCount > 0 ? (
             <Link href="/entries" className="btn btn-primary">
               View Entries
             </Link>
