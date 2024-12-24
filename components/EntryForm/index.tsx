@@ -1,26 +1,30 @@
 "use client";
 
-import { createEntryFormAction } from "@/app/entries/actions";
-import {
-  CreateEntryFormOutput,
-  CreateEntryFormSchema,
-} from "@/components/EntryForm/schema";
+import { saveEntryFormAction } from "@/app/entries/actions";
+import { EntryFormSchema } from "@/components/EntryForm/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Entry } from "@prisma/client";
 import { useActionState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { z } from "zod";
 
-export default function EntryForm() {
-  const [state, formAction, isPending] = useActionState(createEntryFormAction, {
+interface EntryFormProps {
+  entry?: Entry;
+}
+
+export default function EntryForm({ entry }: EntryFormProps) {
+  const [state, formAction, isPending] = useActionState(saveEntryFormAction, {
     errorMessage: "",
   });
 
-  const form = useForm<CreateEntryFormOutput>({
+  const form = useForm<z.output<typeof EntryFormSchema>>({
     mode: "onChange",
-    resolver: zodResolver(CreateEntryFormSchema),
+    resolver: zodResolver(EntryFormSchema),
     defaultValues: {
-      title: "",
-      content: "",
+      entryId: entry?.id.toString() ?? "",
+      title: entry?.title ?? "",
+      content: entry?.content ?? "",
     },
   });
 
@@ -31,12 +35,11 @@ export default function EntryForm() {
   }, [state.errorMessage]);
 
   return (
-    <form
-      action={formAction}
-      onSubmit={form.handleSubmit((data, event) =>
-        event?.currentTarget.form.requestSubmit(),
+    <form action={formAction}>
+      {entry && (
+        <input {...form.register("entryId")} type="hidden" value={entry.id} />
       )}
-    >
+
       <label className="form-control w-full max-w-xs">
         <div className="label">
           <span className="label-text">Title</span>
@@ -72,9 +75,23 @@ export default function EntryForm() {
         )}
       </label>
 
-      <button type="submit" className="btn" disabled={isPending}>
-        {isPending ? "Adding..." : "Add"}
-      </button>
+      {entry ? (
+        <button
+          type="submit"
+          className="btn"
+          disabled={isPending || !form.formState.isValid}
+        >
+          {isPending ? "Updating..." : "Update"}
+        </button>
+      ) : (
+        <button
+          type="submit"
+          className="btn"
+          disabled={isPending || !form.formState.isValid}
+        >
+          {isPending ? "Adding..." : "Add"}
+        </button>
+      )}
 
       {state.errorMessage && (
         <div className="text-error">{state.errorMessage}</div>

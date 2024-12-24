@@ -1,22 +1,22 @@
 "use server";
 
 import {
-  CreateEntryFormSchema,
   DeleteEntryFormSchema,
+  EntryFormSchema,
 } from "@/components/EntryForm/schema";
-import { createEntry, deleteEntry } from "@/db/entry";
+import { createEntry, deleteEntry, updateEntry } from "@/db/entry";
 import { redirect } from "next/navigation";
 
 interface FormState {
   errorMessage?: string;
 }
 
-export async function createEntryFormAction(
+export async function saveEntryFormAction(
   prevState: FormState,
   data: FormData,
 ): Promise<FormState> {
   const formData = Object.fromEntries(data);
-  const parsed = CreateEntryFormSchema.safeParse(formData);
+  const parsed = EntryFormSchema.safeParse(formData);
 
   if (!parsed.success) {
     return {
@@ -25,7 +25,13 @@ export async function createEntryFormAction(
   }
 
   try {
-    await createEntry(parsed.data);
+    const { entryId, ...restData } = parsed.data;
+
+    if (entryId) {
+      await updateEntry(Number(entryId), restData);
+    } else {
+      await createEntry(restData);
+    }
   } catch (error) {
     console.error(error);
 

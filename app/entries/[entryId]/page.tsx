@@ -1,16 +1,14 @@
 import { getEntry } from "@/db/entry";
 import { notFound } from "next/navigation";
 
-interface EntryPageParams {
-  entryId: string;
-}
-
 interface EntryPageProps {
-  params: EntryPageParams;
+  params: Promise<{ entryId: string }>;
 }
 
 export default async function EntryPage({ params }: EntryPageProps) {
-  const entry = await getEntry(Number(params.entryId));
+  const { entryId } = await params;
+
+  const entry = await getEntry(Number(entryId));
 
   if (!entry) {
     notFound();
