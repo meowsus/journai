@@ -1,5 +1,5 @@
 import DeleteEntryButton from "@/components/entries/DeleteEntryForm";
-import { getEntry } from "@/db/entry";
+import { getEntry, getNextEntry, getPreviousEntry } from "@/db/entry";
 import { formatRelative } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -17,11 +17,14 @@ export default async function EntryPage({ params }: EntryPageProps) {
     notFound();
   }
 
+  const nextEntry = await getNextEntry(entry.id);
+  const previousEntry = await getPreviousEntry(entry.id);
+
   const hasUpdates = entry.updatedAt.getTime() !== entry.createdAt.getTime();
 
   return (
-    <article>
-      <header className="mb-2">
+    <article className="flex flex-col gap-4">
+      <header>
         <div className="flex justify-between gap-2">
           <h1 className="text-4xl mb-2">{entry.title}</h1>
           <div className="flex items-center gap-2">
@@ -42,7 +45,32 @@ export default async function EntryPage({ params }: EntryPageProps) {
           Created {formatRelative(entry.createdAt, new Date())}
         </blockquote>
       </header>
+
       <p>{entry.content}</p>
+
+      <div className="flex justify-between">
+        {previousEntry ? (
+          <Link
+            href={`/entries/${previousEntry.id}`}
+            className="btn btn-sm btn-neutral"
+          >
+            « {previousEntry.title}
+          </Link>
+        ) : (
+          <span />
+        )}
+
+        {nextEntry ? (
+          <Link
+            href={`/entries/${nextEntry.id}`}
+            className="btn btn-sm btn-neutral"
+          >
+            {nextEntry.title} »
+          </Link>
+        ) : (
+          <span />
+        )}
+      </div>
     </article>
   );
 }
