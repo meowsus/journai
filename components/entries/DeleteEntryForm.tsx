@@ -22,7 +22,11 @@ export default function DeleteEntryButton({ entryId }: DeleteEntryButtonProps) {
   return (
     <form action={formAction} className="inline-block">
       <input type="hidden" name="entryId" value={entryId} />
-      <button type="submit" className="link" disabled={isPending}>
+      <button
+        type="submit"
+        className="btn btn-sm btn-error"
+        disabled={isPending}
+      >
         {isPending ? "Deleting..." : "Delete"}
       </button>
     </form>
