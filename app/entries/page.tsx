@@ -1,7 +1,8 @@
 import DeleteEntryButton from "@/app/entries/DeleteEntryForm";
 import { getAllEntries } from "@/db/entry";
+import Link from "next/link";
 
-export default async function Home() {
+export default async function EntriesPage() {
   const entries = await getAllEntries();
 
   if (entries.length === 0) {
@@ -16,7 +17,9 @@ export default async function Home() {
     <div>
       {entries.map((entry) => (
         <div key={entry.id}>
-          {entry.title}: {entry.content}
+          <Link className="link" href={`/entries/${entry.id}`}>
+            {entry.title}: {entry.content}
+          </Link>
           <DeleteEntryButton entryId={entry.id} />
         </div>
       ))}

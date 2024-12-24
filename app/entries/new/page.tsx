@@ -1,5 +1,5 @@
 import EntryForm from "@/components/EntryForm";
 
-export default function Home() {
+export default function NewEntryPage() {
   return <EntryForm />;
 }

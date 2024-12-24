@@ -5,6 +5,12 @@ export const getAllEntries = async () => {
   return await prisma.entry.findMany();
 };
 
+export const getEntry = async (id: number) => {
+  return await prisma.entry.findUnique({
+    where: { id },
+  });
+};
+
 export const createEntry = async (data: Prisma.EntryCreateInput) => {
   return await prisma.entry.create({
     data,
