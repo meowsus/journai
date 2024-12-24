@@ -1,3 +1,4 @@
+import Hero from "@/components/Hero";
 import { countEntries, getEntriesByCreatedAt } from "@/db/entry";
 import { add, endOfMonth, formatDate, startOfMonth, sub } from "date-fns";
 import Link from "next/link";
@@ -14,20 +15,14 @@ export default async function EntriesPage({ searchParams }: EntriesPageProps) {
 
   if (entryCount === 0) {
     return (
-      <div className="hero bg-base-200 min-h-screen">
-        <div className="hero-content text-center">
-          <div className="max-w-lg">
-            <h1 className="text-5xl font-bold">No entries found</h1>
-            <p className="py-6">
-              We&apos;ll need to create some entries before we can show them
-              here.
-            </p>
-            <Link href="/entries/new" className="btn btn-primary">
-              Create your first entry
-            </Link>
-          </div>
-        </div>
-      </div>
+      <Hero
+        title="No entries found"
+        subtitle="We'll need to create some entries before we can show them here."
+      >
+        <Link href="/entries/new" className="btn btn-primary">
+          Create your first entry
+        </Link>
+      </Hero>
     );
   }
 
@@ -43,20 +38,17 @@ export default async function EntriesPage({ searchParams }: EntriesPageProps) {
 
   if (entries.length === 0) {
     return (
-      <div className="hero bg-base-200 min-h-screen">
-        <div className="hero-content text-center">
-          <div className="max-w-lg">
-            <h1 className="text-5xl font-bold">No entries found</h1>
-            <p className="py-6">
-              We couldn&apos;t find any entries for{" "}
-              {formatDate(startsAt, "MMMM yyyy")}
-            </p>
-            <Link href="/entries" className="btn btn-primary">
-              Back to the present
-            </Link>
-          </div>
-        </div>
-      </div>
+      <Hero
+        title="No entries found"
+        subtitle={`We couldn't find any entries for ${formatDate(
+          startsAt,
+          "MMMM yyyy",
+        )}`}
+      >
+        <Link href="/entries" className="btn btn-primary">
+          Back to the present
+        </Link>
+      </Hero>
     );
   }
 
