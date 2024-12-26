@@ -2,6 +2,8 @@
 
 import { ToastContainer } from "react-toastify";
 
-const ClientToastContainer = () => <ToastContainer />;
+function ClientToastContainer() {
+  return <ToastContainer />;
+}
 
 export default ClientToastContainer;

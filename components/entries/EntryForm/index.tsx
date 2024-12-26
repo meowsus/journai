@@ -4,11 +4,11 @@ import { saveEntryFormAction } from "@/app/entries/actions";
 import DeleteEntryButton from "@/components/entries/DeleteEntryForm";
 import { EntryFormSchema } from "@/components/entries/EntryForm/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Entry } from "@prisma/client";
+import { type Entry } from "@prisma/client";
 import { useActionState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { z } from "zod";
+import { type z } from "zod";
 
 interface EntryFormProps {
   entry?: Entry;
