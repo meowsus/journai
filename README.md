@@ -15,7 +15,7 @@ DATABASE_URL="file:./dev.db"
 In one terminal, run:
 
 ```bash
-ollama run llama3.2
+ollama pull mistral
 ```
 
 And in another terminal, run:

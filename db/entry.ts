@@ -5,7 +5,14 @@ export const countEntries = async () => {
   return await prisma.entry.count();
 };
 
-export const getEntriesByCreatedAt = (startsAt: Date, endsAt: Date) => {
+export type EntryWithSummary = Prisma.EntryGetPayload<{
+  include: { summary: true };
+}>;
+
+export const getEntriesByCreatedAt = (
+  startsAt: Date,
+  endsAt: Date,
+): Promise<EntryWithSummary[]> => {
   return prisma.entry.findMany({
     where: {
       createdAt: {

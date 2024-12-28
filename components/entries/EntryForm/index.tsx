@@ -3,15 +3,15 @@
 import { saveEntryFormAction } from "@/app/entries/actions";
 import DeleteEntryButton from "@/components/entries/DeleteEntryForm";
 import { EntryFormSchema } from "@/components/entries/EntryForm/schema";
+import { type EntryWithSummary } from "@/db/entry";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type Prisma } from "@prisma/client";
 import { useActionState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { type z } from "zod";
 
 interface EntryFormProps {
-  entry?: Prisma.EntryGetPayload<{ include: { summary: true } }>;
+  entry?: EntryWithSummary;
 }
 
 export default function EntryForm({ entry }: EntryFormProps) {
