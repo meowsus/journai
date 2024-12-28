@@ -4,14 +4,14 @@ import { saveEntryFormAction } from "@/app/entries/actions";
 import DeleteEntryButton from "@/components/entries/DeleteEntryForm";
 import { EntryFormSchema } from "@/components/entries/EntryForm/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type Entry } from "@prisma/client";
-import { useActionState, useEffect } from "react";
+import { type Prisma } from "@prisma/client";
+import { useActionState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { type z } from "zod";
 
 interface EntryFormProps {
-  entry?: Entry;
+  entry?: Prisma.EntryGetPayload<{ include: { summary: true } }>;
 }
 
 export default function EntryForm({ entry }: EntryFormProps) {
@@ -24,10 +24,15 @@ export default function EntryForm({ entry }: EntryFormProps) {
     resolver: zodResolver(EntryFormSchema),
     defaultValues: {
       entryId: entry?.id.toString() ?? "",
-      title: entry?.title ?? "",
       content: entry?.content ?? "",
     },
   });
+
+  const title = useMemo(() => {
+    if (entry?.summary?.title) return `Update ${entry.summary.title}`;
+    if (entry) return "Update Entry";
+    return "New Entry";
+  }, [entry]);
 
   useEffect(() => {
     if (state.errorMessage) {
@@ -37,29 +42,11 @@ export default function EntryForm({ entry }: EntryFormProps) {
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      <h1 className="text-4xl">{entry ? entry.title : "New Entry"}</h1>
+      <h1 className="text-4xl">{title}</h1>
 
       {entry && (
         <input {...form.register("entryId")} type="hidden" value={entry.id} />
       )}
-
-      <label className="form-control w-full">
-        <div className="label">
-          <span className="label-text">Title</span>
-          <span className="label-text-alt text-warning">Required</span>
-        </div>
-        <input
-          {...form.register("title", { required: true })}
-          type="text"
-          placeholder="Type here"
-          className="input input-bordered w-full"
-        />
-        {form.formState.errors.title && (
-          <span className="text-error">
-            {form.formState.errors.title.message}
-          </span>
-        )}
-      </label>
 
       <label className="form-control w-full">
         <div className="label">

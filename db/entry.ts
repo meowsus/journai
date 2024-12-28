@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 
 export const countEntries = async () => {
   return await prisma.entry.count();
@@ -15,6 +15,9 @@ export const getEntriesByCreatedAt = (startsAt: Date, endsAt: Date) => {
     },
     orderBy: {
       createdAt: "desc",
+    },
+    include: {
+      summary: true,
     },
   });
 };
