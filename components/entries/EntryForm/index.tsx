@@ -1,10 +1,11 @@
 "use client";
 
 import { saveEntryFormAction } from "@/app/entries/actions";
-import DeleteEntryButton from "@/components/entries/DeleteEntryForm";
+import DeleteEntryButton from "@/components/entries/DeleteEntryButton";
 import { EntryFormSchema } from "@/components/entries/EntryForm/schema";
 import { type EntryWithSummary } from "@/db/entry";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -15,9 +16,12 @@ interface EntryFormProps {
 }
 
 export default function EntryForm({ entry }: EntryFormProps) {
-  const [state, formAction, isPending] = useActionState(saveEntryFormAction, {
-    errorMessage: "",
-  });
+  const router = useRouter();
+
+  const [state, formAction, isPending] = useActionState(
+    saveEntryFormAction,
+    {},
+  );
 
   const form = useForm<z.output<typeof EntryFormSchema>>({
     mode: "onChange",
@@ -35,10 +39,13 @@ export default function EntryForm({ entry }: EntryFormProps) {
   }, [entry]);
 
   useEffect(() => {
-    if (state.errorMessage) {
-      toast.error(state.errorMessage);
+    if (state.success) {
+      toast.success("Entry saved");
+      router.push("/entries");
+    } else if (state.success) {
+      toast.error(state.error);
     }
-  }, [state.errorMessage]);
+  }, [router, state.error, state.success]);
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
@@ -65,9 +72,7 @@ export default function EntryForm({ entry }: EntryFormProps) {
         )}
       </label>
 
-      {state.errorMessage && (
-        <div className="text-error">{state.errorMessage}</div>
-      )}
+      {state.error && <div className="text-error">{state.error}</div>}
 
       <div className="flex gap-2 justify-end">
         {entry ? (

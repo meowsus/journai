@@ -1,14 +1,12 @@
 "use server";
 
-import {
-  DeleteEntryFormSchema,
-  EntryFormSchema,
-} from "@/components/entries/EntryForm/schema";
+import { EntryFormSchema } from "@/components/entries/EntryForm/schema";
 import { createEntry, deleteEntry, updateEntry } from "@/db/entry";
-import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 interface FormState {
-  errorMessage?: string;
+  success?: boolean;
+  error?: string;
 }
 
 export async function saveEntryFormAction(
@@ -19,9 +17,7 @@ export async function saveEntryFormAction(
   const parsed = EntryFormSchema.safeParse(formData);
 
   if (!parsed.success) {
-    return {
-      errorMessage: "Validation failed",
-    };
+    return { error: "Validation failed" };
   }
 
   try {
@@ -32,39 +28,21 @@ export async function saveEntryFormAction(
     } else {
       await createEntry(restData);
     }
+    revalidatePath("/entries");
+    return { success: true };
   } catch (error) {
     console.error(error);
-
-    return {
-      errorMessage: "Failed to add entry",
-    };
+    return { error: "Failed to add entry" };
   }
-
-  redirect("/entries");
 }
 
-export async function deleteEntryFormAction(
-  prevState: FormState,
-  data: FormData,
-): Promise<FormState> {
-  const formData = Object.fromEntries(data);
-  const parsed = DeleteEntryFormSchema.safeParse(formData);
-
-  if (!parsed.success) {
-    return {
-      errorMessage: "Validation failed",
-    };
-  }
-
+export async function deleteEntryAction(entryId: number) {
   try {
-    await deleteEntry(Number(parsed.data.entryId));
+    await deleteEntry(entryId);
+    revalidatePath("/entries");
+    return { success: true };
   } catch (error) {
-    console.error(error);
-
-    return {
-      errorMessage: "Failed to delete entry",
-    };
+    console.log(error);
+    return { error: "Failed to delete entry" };
   }
-
-  redirect("/entries");
 }

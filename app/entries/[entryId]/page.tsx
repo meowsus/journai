@@ -1,4 +1,4 @@
-import DeleteEntryButton from "@/components/entries/DeleteEntryForm";
+import DeleteEntryButton from "@/components/entries/DeleteEntryButton";
 import { getEntry, getNextEntry, getPreviousEntry } from "@/db/entry";
 import { formatRelative } from "date-fns";
 import Link from "next/link";
