@@ -8,3 +8,21 @@ export const createEntrySummary = async (
     data,
   });
 };
+
+export const deleteEntrySummary = async (id: number) => {
+  return await prisma.entrySummary.delete({
+    where: { id },
+  });
+};
+
+export const getEntrySummary = async (id: number) => {
+  return await prisma.entrySummary.findUnique({
+    where: { id },
+  });
+};
+
+export const getEntrySummaryByEntryId = async (entryId: number) => {
+  return await prisma.entrySummary.findFirst({
+    where: { entryId },
+  });
+};

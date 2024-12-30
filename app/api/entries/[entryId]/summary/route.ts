@@ -36,7 +36,7 @@ export async function POST(
 
     const result = await createEntrySummary(data);
 
-    return NextResponse.json(result);
+    return NextResponse.json({ data: result });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

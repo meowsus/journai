@@ -1,3 +1,7 @@
+import {
+  deleteEntrySummary,
+  getEntrySummaryByEntryId,
+} from "@/db/entrySummary";
 import prisma from "@/prisma/client";
 import { type Prisma } from "@prisma/client";
 
@@ -79,6 +83,12 @@ export const updateEntry = async (
   id: number,
   data: Prisma.EntryUpdateInput,
 ) => {
+  const entrySummary = await getEntrySummaryByEntryId(id);
+
+  if (entrySummary) {
+    await deleteEntrySummary(entrySummary.id);
+  }
+
   return await prisma.entry.update({
     where: { id },
     data,

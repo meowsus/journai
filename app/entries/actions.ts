@@ -2,17 +2,13 @@
 
 import { EntryFormSchema } from "@/components/entries/EntryForm/schema";
 import { createEntry, deleteEntry, updateEntry } from "@/db/entry";
+import { type ActionResponse } from "@/types/actions";
 import { revalidatePath } from "next/cache";
 
-interface FormState {
-  success?: boolean;
-  error?: string;
-}
-
 export async function saveEntryFormAction(
-  prevState: FormState,
+  prevState: ActionResponse,
   data: FormData,
-): Promise<FormState> {
+): Promise<ActionResponse> {
   const formData = Object.fromEntries(data);
   const parsed = EntryFormSchema.safeParse(formData);
 
