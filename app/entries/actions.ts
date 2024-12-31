@@ -38,7 +38,7 @@ export async function deleteEntryAction(entryId: number) {
     revalidatePath("/entries");
     return { success: true };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { error: "Failed to delete entry" };
   }
 }

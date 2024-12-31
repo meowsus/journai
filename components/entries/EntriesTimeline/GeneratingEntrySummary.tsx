@@ -2,7 +2,7 @@
 
 import EntrySummaryContent from "@/components/entries/EntriesTimeline/EntrySummaryContent";
 import useGenerateEntrySummary from "@/components/entries/EntriesTimeline/hooks";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface GeneratingEntrySummaryProps {
   entryId: number;
@@ -14,7 +14,13 @@ export default function GeneratingEntrySummary({
   const { generate, isPending, entrySummary } =
     useGenerateEntrySummary(entryId);
 
+  const firstRender = useRef(true);
+
   useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
     generate();
   }, [generate]);
 
