@@ -21,6 +21,7 @@ export default function GeneratingEntrySummary({
       firstRender.current = false;
       return;
     }
+
     generate();
   }, [generate]);
 

@@ -4,6 +4,7 @@ import {
   createEntrySummary,
   getEntrySummaryByEntryId,
 } from "@/db/entrySummary";
+import { ENTRY_SUMMARY_SYSTEM_PROMPT } from "@/utils/prompts";
 import { type EntrySummary, type Prisma } from "@prisma/client";
 import { generateObject } from "ai";
 import { NextResponse, type NextRequest } from "next/server";
@@ -40,6 +41,7 @@ export async function POST(
     const { object } = await generateObject({
       model: ollama("mistral"),
       schema: AiSummarySchema,
+      system: ENTRY_SUMMARY_SYSTEM_PROMPT,
       prompt: `Summarize this journal entry: ${entry.content}`,
     });
 
