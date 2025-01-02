@@ -34,6 +34,7 @@ export default async function EntriesPage({ searchParams }: EntriesPageProps) {
 
   const startsAt = startsAtParam ? new Date(startsAtParam) : startOfMonth(now);
   const endsAt = endsAtParam ? new Date(endsAtParam) : endOfMonth(startsAt);
+  const isCurrentMonth = startsAt.getTime() === startOfMonth(now).getTime();
 
   const entries = await getEntriesByCreatedAt(startsAt, endsAt);
 
@@ -46,9 +47,30 @@ export default async function EntriesPage({ searchParams }: EntriesPageProps) {
           "MMMM yyyy",
         )}`}
       >
-        <Link href="/entries" className="btn btn-primary">
-          Back to the present
-        </Link>
+        {isCurrentMonth ? (
+          <div className="flex items-center gap-2">
+            <Link
+              href={{
+                pathname: "/entries",
+                query: {
+                  startsAt: sub(startsAt, { months: 1 }).toISOString(),
+                  endsAt: sub(endsAt, { months: 1 }).toISOString(),
+                },
+              }}
+              className="btn btn-neutral"
+            >
+              View previous month
+            </Link>
+            or
+            <Link href="/entries/new" className="btn btn-primary">
+              Create a new entry
+            </Link>
+          </div>
+        ) : (
+          <Link href="/entries" className="btn btn-primary">
+            Back to the present
+          </Link>
+        )}
       </Hero>
     );
   }

@@ -36,6 +36,9 @@ export const getEntriesByCreatedAt = (
 export const getEntry = async (id: number) => {
   return await prisma.entry.findUnique({
     where: { id },
+    include: {
+      summary: true,
+    },
   });
 };
 
@@ -49,6 +52,9 @@ export const getNextEntry = async (id: number) => {
   return await prisma.entry.findFirst({
     where: {
       createdAt: { gt: currentEntry.createdAt },
+    },
+    include: {
+      summary: true,
     },
     orderBy: {
       createdAt: "asc",
@@ -66,6 +72,9 @@ export const getPreviousEntry = async (id: number) => {
   return await prisma.entry.findFirst({
     where: {
       createdAt: { lt: currentEntry.createdAt },
+    },
+    include: {
+      summary: true,
     },
     orderBy: {
       createdAt: "desc",
