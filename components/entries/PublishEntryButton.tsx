@@ -36,7 +36,7 @@ export default function PublishEntryButton({
   return (
     <button
       type="button"
-      className="btn btn-sm btn-secondary"
+      className="btn btn-secondary btn-sm"
       disabled={isPending}
       onClick={onClick}
     >

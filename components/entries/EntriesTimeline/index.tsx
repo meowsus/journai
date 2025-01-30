@@ -18,7 +18,7 @@ export default function EntriesTimeline({ entries }: EntriesTimelineProps) {
                 {formatDate(entry.createdAt, "MMM d, yyyy @ h:mm a")}
               </span>
               {entry.isDraft && (
-                <div className="badge badge-sm badge-secondary">Draft</div>
+                <div className="badge badge-secondary badge-sm">Draft</div>
               )}
             </div>
           </div>

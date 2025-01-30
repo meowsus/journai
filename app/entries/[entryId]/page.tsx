@@ -26,13 +26,13 @@ export default async function EntryPage({ params }: EntryPageProps) {
     <article className="flex flex-col gap-4">
       <header>
         <div className="flex justify-between gap-2">
-          <h1 className="text-4xl mb-2">
+          <h1 className="mb-2 text-4xl">
             {entry.summary?.title ?? "Viewing entry"}
           </h1>
           <div className="flex items-center gap-2">
             <Link
               href={`/entries/${entry.id}/edit`}
-              className="btn btn-sm btn-primary"
+              className="btn btn-primary btn-sm"
             >
               Edit
             </Link>
@@ -40,7 +40,7 @@ export default async function EntryPage({ params }: EntryPageProps) {
             <DeleteEntryButton entryId={entry.id} />
           </div>
         </div>
-        <blockquote className="flex flex-col gap-2 italic border-l-2 border-slate-600 pl-2 py-1">
+        <blockquote className="flex flex-col gap-2 border-l-2 border-slate-600 py-1 pl-2 italic">
           Created {formatRelative(entry.createdAt, new Date())}
           {hasUpdates && (
             <> and updated {formatRelative(entry.updatedAt, new Date())}</>
@@ -54,7 +54,7 @@ export default async function EntryPage({ params }: EntryPageProps) {
         {previousEntry ? (
           <Link
             href={`/entries/${previousEntry.id}`}
-            className="btn btn-sm btn-neutral"
+            className="btn btn-neutral btn-sm"
           >
             « {previousEntry.summary?.title ?? "Previous entry"}
           </Link>
@@ -65,7 +65,7 @@ export default async function EntryPage({ params }: EntryPageProps) {
         {nextEntry ? (
           <Link
             href={`/entries/${nextEntry.id}`}
-            className="btn btn-sm btn-neutral"
+            className="btn btn-neutral btn-sm"
           >
             {nextEntry.summary?.title ?? "Next entry"} »
           </Link>

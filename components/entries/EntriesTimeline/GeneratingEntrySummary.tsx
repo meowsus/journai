@@ -36,7 +36,7 @@ export default function GeneratingEntrySummary({
 
   if (!entrySummary) {
     return (
-      <span className="text-error flex items-center gap-2">
+      <span className="flex items-center gap-2 text-error">
         Failed to generate summary
         <button className="link" type="button" onClick={generate}>
           Try again?

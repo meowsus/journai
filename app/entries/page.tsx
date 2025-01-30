@@ -78,12 +78,12 @@ export default async function EntriesPage({ searchParams }: EntriesPageProps) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between gap-2">
-        <h1 className="text-4xl mb-2">
+        <h1 className="mb-2 text-4xl">
           Entries for {formatDate(startsAt, "MMMM yyyy")}
         </h1>
 
         <div className="flex items-center gap-2">
-          <Link href="/entries/new" className="btn btn-sm btn-primary">
+          <Link href="/entries/new" className="btn btn-primary btn-sm">
             New Entry
           </Link>
         </div>
@@ -97,7 +97,7 @@ export default async function EntriesPage({ searchParams }: EntriesPageProps) {
             endsAt: sub(endsAt, { months: 1 }).toISOString(),
           },
         }}
-        className="btn btn-sm btn-ghost"
+        className="btn btn-ghost btn-sm"
       >
         Previous month
       </Link>
@@ -112,7 +112,7 @@ export default async function EntriesPage({ searchParams }: EntriesPageProps) {
             endsAt: add(endsAt, { months: 1 }).toISOString(),
           },
         }}
-        className="btn btn-sm btn-ghost"
+        className="btn btn-ghost btn-sm"
       >
         Next month
       </Link>

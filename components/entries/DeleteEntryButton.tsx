@@ -34,7 +34,7 @@ export default function DeleteEntryButton({ entryId }: DeleteEntryButtonProps) {
   return (
     <button
       type="button"
-      className="btn btn-sm btn-error"
+      className="btn btn-error btn-sm"
       disabled={isPending}
       onClick={onClick}
     >

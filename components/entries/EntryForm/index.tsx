@@ -47,7 +47,7 @@ export default function EntryForm({ entry }: EntryFormProps) {
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      <h1 className="text-4xl flex justify-between items-center gap-2">
+      <h1 className="flex items-center justify-between gap-2 text-4xl">
         {isNew ? "New" : "Edit"} Entry
         {entry.isDraft && <div className="badge badge-secondary">Draft</div>}
       </h1>
@@ -73,13 +73,13 @@ export default function EntryForm({ entry }: EntryFormProps) {
 
       {state.error && <div className="text-error">{state.error}</div>}
 
-      <div className="flex gap-2 justify-end">
+      <div className="flex justify-end gap-2">
         <DeleteEntryButton entryId={entry.id} />
         <PublishEntryButton entryId={entry.id} />
 
         <button
           type="submit"
-          className="btn btn-sm btn-primary"
+          className="btn btn-primary btn-sm"
           disabled={isPending || !form.formState.isValid}
         >
           {isPending ? "Updating..." : "Update"}
