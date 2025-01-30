@@ -22,6 +22,14 @@ model Entry {
   summary EntrySummary?
 }
 
+model TarotCard {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String
+}
+
 model EntrySummary {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
