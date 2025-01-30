@@ -88,6 +88,10 @@ export const createEntry = async (data: Prisma.EntryCreateInput) => {
   });
 };
 
+export const createDraftEntry = async () => {
+  return await createEntry({ isDraft: true, content: "" });
+};
+
 export const updateEntry = async (
   id: number,
   data: Prisma.EntryUpdateInput,

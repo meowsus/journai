@@ -42,3 +42,14 @@ export async function deleteEntryAction(entryId: number) {
     return { error: "Failed to delete entry" };
   }
 }
+
+export async function publishEntryAction(entryId: number) {
+  try {
+    await updateEntry(entryId, { isDraft: false });
+    revalidatePath("/entries");
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to publish entry" };
+  }
+}

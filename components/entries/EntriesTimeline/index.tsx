@@ -1,7 +1,6 @@
-import EntrySummaryContent from "@/components/entries/EntriesTimeline/EntrySummaryContent";
-import GeneratingEntrySummary from "@/components/entries/EntriesTimeline/GeneratingEntrySummary";
 import { type EntryWithSummary } from "@/db/entry";
 import { formatDate } from "date-fns";
+import Link from "next/link";
 
 interface EntriesTimelineProps {
   entries: EntryWithSummary[];
@@ -14,9 +13,14 @@ export default function EntriesTimeline({ entries }: EntriesTimelineProps) {
         <li key={entry.id}>
           {index > 0 && <hr />}
           <div className="timeline-start">
-            <span className="text-sm text-slate-500">
-              {formatDate(entry.createdAt, "MMM d, yyyy @ h:mm a")}
-            </span>
+            <div className="inline-flex items-center gap-2">
+              <span className="text-sm text-slate-500">
+                {formatDate(entry.createdAt, "MMM d, yyyy @ h:mm a")}
+              </span>
+              {entry.isDraft && (
+                <div className="badge badge-sm badge-secondary">Draft</div>
+              )}
+            </div>
           </div>
           <div className="timeline-middle">
             <svg
@@ -33,14 +37,27 @@ export default function EntriesTimeline({ entries }: EntriesTimelineProps) {
             </svg>
           </div>
           <div className="timeline-end">
-            {entry.summary ? (
+            {entry.isDraft ? (
+              <Link
+                className="link link-primary"
+                href={`/entries/${entry.id}/edit`}
+              >
+                Edit
+              </Link>
+            ) : (
+              <Link className="link link-primary" href={`/entries/${entry.id}`}>
+                View
+              </Link>
+            )}
+
+            {/* {entry.summary ? (
               <EntrySummaryContent
                 entryId={entry.id}
                 entrySummary={entry.summary}
               />
             ) : (
               <GeneratingEntrySummary entryId={entry.id} />
-            )}
+            )} */}
           </div>
           <hr />
         </li>

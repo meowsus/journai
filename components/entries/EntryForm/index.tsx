@@ -3,20 +3,22 @@
 import { saveEntryFormAction } from "@/app/entries/actions";
 import DeleteEntryButton from "@/components/entries/DeleteEntryButton";
 import { EntryFormSchema } from "@/components/entries/EntryForm/schema";
-import { type EntryWithSummary } from "@/db/entry";
+import PublishEntryButton from "@/components/entries/PublishEntryButton";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useMemo } from "react";
+import { type Entry } from "@prisma/client";
+import { usePathname, useRouter } from "next/navigation";
+import { useActionState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { type z } from "zod";
 
 interface EntryFormProps {
-  entry?: EntryWithSummary;
+  entry: Entry;
 }
 
 export default function EntryForm({ entry }: EntryFormProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [state, formAction, isPending] = useActionState(
     saveEntryFormAction,
@@ -27,16 +29,10 @@ export default function EntryForm({ entry }: EntryFormProps) {
     mode: "onChange",
     resolver: zodResolver(EntryFormSchema),
     defaultValues: {
-      entryId: entry?.id.toString() ?? "",
-      content: entry?.content ?? "",
+      entryId: entry.id.toString() ?? "",
+      content: entry.content ?? "",
     },
   });
-
-  const title = useMemo(() => {
-    if (entry?.summary?.title) return `Update ${entry.summary.title}`;
-    if (entry) return "Update Entry";
-    return "New Entry";
-  }, [entry]);
 
   useEffect(() => {
     if (state.success) {
@@ -47,13 +43,16 @@ export default function EntryForm({ entry }: EntryFormProps) {
     }
   }, [router, state.error, state.success]);
 
+  const isNew = pathname === "/entries/new";
+
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      <h1 className="text-4xl">{title}</h1>
+      <h1 className="text-4xl flex justify-between items-center gap-2">
+        {isNew ? "New" : "Edit"} Entry
+        {entry.isDraft && <div className="badge badge-secondary">Draft</div>}
+      </h1>
 
-      {entry && (
-        <input {...form.register("entryId")} type="hidden" value={entry.id} />
-      )}
+      <input {...form.register("entryId")} type="hidden" value={entry.id} />
 
       <label className="form-control w-full">
         <div className="label">
@@ -75,27 +74,16 @@ export default function EntryForm({ entry }: EntryFormProps) {
       {state.error && <div className="text-error">{state.error}</div>}
 
       <div className="flex gap-2 justify-end">
-        {entry ? (
-          <>
-            <DeleteEntryButton entryId={entry.id} />
+        <DeleteEntryButton entryId={entry.id} />
+        <PublishEntryButton entryId={entry.id} />
 
-            <button
-              type="submit"
-              className="btn btn-sm btn-primary"
-              disabled={isPending || !form.formState.isValid}
-            >
-              {isPending ? "Updating..." : "Update"}
-            </button>
-          </>
-        ) : (
-          <button
-            type="submit"
-            className="btn btn-sm btn-primary"
-            disabled={isPending || !form.formState.isValid}
-          >
-            {isPending ? "Adding..." : "Add"}
-          </button>
-        )}
+        <button
+          type="submit"
+          className="btn btn-sm btn-primary"
+          disabled={isPending || !form.formState.isValid}
+        >
+          {isPending ? "Updating..." : "Update"}
+        </button>
       </div>
     </form>
   );
