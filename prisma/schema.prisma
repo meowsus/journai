@@ -19,7 +19,24 @@ model Entry {
 
   content String
 
-  summary EntrySummary?
+  EntrySummary   EntrySummary?
+  TarotCardPulls TarotCardPull[]
+}
+
+model TarotCardPull {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  isReversed Boolean @default(false)
+
+  impression String
+
+  Entry   Entry? @relation(fields: [entryId], references: [id])
+  entryId Int?
+
+  TarotCard   TarotCard @relation(fields: [tarotCardId], references: [id])
+  tarotCardId Int
 }
 
 model TarotCard {
@@ -28,6 +45,8 @@ model TarotCard {
   updatedAt DateTime @updatedAt
 
   name String
+
+  TarotCardPull TarotCardPull[]
 }
 
 model EntrySummary {

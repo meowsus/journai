@@ -27,7 +27,7 @@ export default async function EntryPage({ params }: EntryPageProps) {
       <header>
         <div className="flex justify-between gap-2">
           <h1 className="mb-2 text-4xl">
-            {entry.summary?.title ?? "Viewing entry"}
+            {entry.EntrySummary?.title ?? "Viewing entry"}
           </h1>
           <div className="flex items-center gap-2">
             <Link
@@ -56,7 +56,7 @@ export default async function EntryPage({ params }: EntryPageProps) {
             href={`/entries/${previousEntry.id}`}
             className="btn btn-neutral btn-sm"
           >
-            « {previousEntry.summary?.title ?? "Previous entry"}
+            « {previousEntry.EntrySummary?.title ?? "Previous entry"}
           </Link>
         ) : (
           <span />
@@ -67,7 +67,7 @@ export default async function EntryPage({ params }: EntryPageProps) {
             href={`/entries/${nextEntry.id}`}
             className="btn btn-neutral btn-sm"
           >
-            {nextEntry.summary?.title ?? "Next entry"} »
+            {nextEntry.EntrySummary?.title ?? "Next entry"} »
           </Link>
         ) : (
           <span />

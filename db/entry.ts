@@ -10,7 +10,7 @@ export const countEntries = async () => {
 };
 
 export type EntryWithSummary = Prisma.EntryGetPayload<{
-  include: { summary: true };
+  include: { EntrySummary: true };
 }>;
 
 export const getEntriesByCreatedAt = (
@@ -28,7 +28,7 @@ export const getEntriesByCreatedAt = (
       createdAt: "desc",
     },
     include: {
-      summary: true,
+      EntrySummary: true,
     },
   });
 };
@@ -37,7 +37,7 @@ export const getEntry = async (id: number) => {
   return await prisma.entry.findUnique({
     where: { id },
     include: {
-      summary: true,
+      EntrySummary: true,
     },
   });
 };
@@ -54,7 +54,7 @@ export const getNextEntry = async (id: number) => {
       createdAt: { gt: currentEntry.createdAt },
     },
     include: {
-      summary: true,
+      EntrySummary: true,
     },
     orderBy: {
       createdAt: "asc",
@@ -74,7 +74,7 @@ export const getPreviousEntry = async (id: number) => {
       createdAt: { lt: currentEntry.createdAt },
     },
     include: {
-      summary: true,
+      EntrySummary: true,
     },
     orderBy: {
       createdAt: "desc",
