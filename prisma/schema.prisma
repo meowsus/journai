@@ -16,10 +16,22 @@ model Entry {
   updatedAt DateTime @updatedAt
 
   isDraft Boolean @default(true)
-
   content String
 
-  EntrySummary   EntrySummary?
+  EntrySummary EntrySummary?
+  TarotReading TarotReading?
+}
+
+model TarotReading {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  impression String?
+
+  Entry   Entry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  entryId Int   @unique
+
   TarotCardPulls TarotCardPull[]
 }
 
@@ -29,14 +41,13 @@ model TarotCardPull {
   updatedAt DateTime @updatedAt
 
   isReversed Boolean @default(false)
+  impression String?
 
-  impression String
-
-  Entry   Entry? @relation(fields: [entryId], references: [id])
-  entryId Int?
+  TarotReading   TarotReading? @relation(fields: [tarotReadingId], references: [id])
+  tarotReadingId Int?
 
   TarotCard   TarotCard @relation(fields: [tarotCardId], references: [id])
-  tarotCardId Int
+  tarotCardId Int       @unique
 }
 
 model TarotCard {
@@ -46,7 +57,7 @@ model TarotCard {
 
   name String
 
-  TarotCardPull TarotCardPull[]
+  TarotCardPull TarotCardPull?
 }
 
 model EntrySummary {
@@ -57,6 +68,6 @@ model EntrySummary {
   title   String
   content String
 
-  entry   Entry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  Entry   Entry @relation(fields: [entryId], references: [id], onDelete: Cascade)
   entryId Int   @unique
 }
