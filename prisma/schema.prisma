@@ -46,18 +46,18 @@ model TarotCardPull {
   TarotReading   TarotReading? @relation(fields: [tarotReadingId], references: [id])
   tarotReadingId Int?
 
-  TarotCard   TarotCard @relation(fields: [tarotCardId], references: [id])
-  tarotCardId Int       @unique
+  TarotCard   TarotCard? @relation(fields: [tarotCardId], references: [id])
+  tarotCardId Int?
+
+  @@unique([tarotReadingId, tarotCardId])
 }
 
 model TarotCard {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id Int @id @default(autoincrement())
 
   name String
 
-  TarotCardPull TarotCardPull?
+  TarotCardPull TarotCardPull[]
 }
 
 model EntrySummary {

@@ -1,34 +1,36 @@
 "use server";
 
-import { EntryFormSchema } from "@/components/entries/EntryForm/schema";
-import { createEntry, deleteEntry, updateEntry } from "@/db/entry";
-import { type ActionResponse } from "@/types/actions";
+import { deleteEntry, updateEntry } from "@/db/entry";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
 
-export async function saveEntryFormAction(
-  prevState: ActionResponse,
-  data: FormData,
-): Promise<ActionResponse> {
+const schema = z.object({
+  entryId: z.string(),
+  content: z.string().trim().min(1, {
+    message: "Content is required",
+  }),
+});
+
+export async function updateEntryAction(data: FormData) {
   const formData = Object.fromEntries(data);
-  const parsed = EntryFormSchema.safeParse(formData);
+  const parsed = schema.safeParse(formData);
 
   if (!parsed.success) {
-    return { error: "Validation failed" };
+    throw new Error("Validation failed");
   }
 
   try {
     const { entryId, ...restData } = parsed.data;
 
-    if (entryId) {
-      await updateEntry(Number(entryId), restData);
-    } else {
-      await createEntry(restData);
-    }
-    revalidatePath("/entries");
-    return { success: true };
+    console.log("Updating entry", entryId, restData);
+
+    await updateEntry(Number(entryId), restData);
+
+    redirect(`/`);
   } catch (error) {
     console.error(error);
-    return { error: "Failed to add entry" };
+    throw new Error("Failed to update entry");
   }
 }
 

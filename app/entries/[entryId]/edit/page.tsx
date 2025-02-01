@@ -1,4 +1,3 @@
-import EntryForm from "@/components/entries/EntryForm";
 import { getEntry } from "@/db/entry";
 import { notFound } from "next/navigation";
 
@@ -15,5 +14,6 @@ export default async function EditEntryPage({ params }: EditEntryPageProps) {
     notFound();
   }
 
-  return <EntryForm entry={entry} />;
+  return "haha";
+  // return <EntryForm entry={entry} />;
 }

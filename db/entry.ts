@@ -1,7 +1,3 @@
-import {
-  deleteEntrySummary,
-  getEntrySummaryByEntryId,
-} from "@/db/entrySummary";
 import prisma from "@/prisma/client";
 import { type Prisma } from "@prisma/client";
 
@@ -9,14 +5,7 @@ export const countEntries = async () => {
   return await prisma.entry.count();
 };
 
-export type EntryWithSummary = Prisma.EntryGetPayload<{
-  include: { EntrySummary: true };
-}>;
-
-export const getEntriesByCreatedAt = (
-  startsAt: Date,
-  endsAt: Date,
-): Promise<EntryWithSummary[]> => {
+export const getEntriesByCreatedAt = (startsAt: Date, endsAt: Date) => {
   return prisma.entry.findMany({
     where: {
       createdAt: {
@@ -27,17 +16,28 @@ export const getEntriesByCreatedAt = (
     orderBy: {
       createdAt: "desc",
     },
-    include: {
-      EntrySummary: true,
-    },
   });
 };
 
 export const getEntry = async (id: number) => {
   return await prisma.entry.findUnique({
     where: { id },
+  });
+};
+
+export const getEntryWithFullTarotReading = async (id: number) => {
+  return await prisma.entry.findUnique({
+    where: { id },
     include: {
-      EntrySummary: true,
+      TarotReading: {
+        include: {
+          TarotCardPulls: {
+            include: {
+              TarotCard: true,
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -52,9 +52,6 @@ export const getNextEntry = async (id: number) => {
   return await prisma.entry.findFirst({
     where: {
       createdAt: { gt: currentEntry.createdAt },
-    },
-    include: {
-      EntrySummary: true,
     },
     orderBy: {
       createdAt: "asc",
@@ -73,9 +70,6 @@ export const getPreviousEntry = async (id: number) => {
     where: {
       createdAt: { lt: currentEntry.createdAt },
     },
-    include: {
-      EntrySummary: true,
-    },
     orderBy: {
       createdAt: "desc",
     },
@@ -88,20 +82,10 @@ export const createEntry = async (data: Prisma.EntryCreateInput) => {
   });
 };
 
-export const createDraftEntry = async () => {
-  return await createEntry({ isDraft: true, content: "" });
-};
-
 export const updateEntry = async (
   id: number,
   data: Prisma.EntryUpdateInput,
 ) => {
-  const entrySummary = await getEntrySummaryByEntryId(id);
-
-  if (entrySummary) {
-    await deleteEntrySummary(entrySummary.id);
-  }
-
   return await prisma.entry.update({
     where: { id },
     data,

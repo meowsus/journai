@@ -54,7 +54,7 @@ export async function POST(
 
     const data: Prisma.EntrySummaryCreateInput = {
       ...object.summary,
-      entry: { connect: { id: entry.id } },
+      Entry: { connect: { id: entry.id } },
     };
 
     const result = await createEntrySummary(data);
