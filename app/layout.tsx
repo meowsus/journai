@@ -29,8 +29,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <main className="px-6 py-4">{children}</main>
+        <div className="mx-auto max-w-6xl bg-base-200">
+          <Header />
+          <main className="px-6 py-4">{children}</main>
+        </div>
         <ClientToastContainer />
       </body>
     </html>

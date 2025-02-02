@@ -81,12 +81,6 @@ export default async function EntriesPage({ searchParams }: EntriesPageProps) {
         <h1 className="mb-2 text-4xl">
           Entries for {formatDate(startsAt, "MMMM yyyy")}
         </h1>
-
-        <div className="flex items-center gap-2">
-          <Link href="/entries/new" className="btn btn-primary btn-sm">
-            New Entry
-          </Link>
-        </div>
       </div>
 
       <Link

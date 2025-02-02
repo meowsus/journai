@@ -25,6 +25,15 @@ export const getEntry = async (id: number) => {
   });
 };
 
+export const getEntryWithSummary = async (id: number) => {
+  return await prisma.entry.findUnique({
+    where: { id },
+    include: {
+      EntrySummary: true,
+    },
+  });
+};
+
 export const getEntryWithFullTarotReading = async (id: number) => {
   return await prisma.entry.findUnique({
     where: { id },

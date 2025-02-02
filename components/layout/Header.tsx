@@ -73,7 +73,13 @@ export default function Header() {
             Journai
           </Link>
         </div>
-        <div className="navbar-end"></div>
+        <div className="navbar-end">
+          <div className="flex items-center gap-2">
+            <Link href="/entries/new" className="btn btn-primary btn-sm">
+              New Entry
+            </Link>
+          </div>
+        </div>
       </div>
     </header>
   );

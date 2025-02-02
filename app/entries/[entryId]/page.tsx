@@ -1,5 +1,9 @@
 import DeleteEntryButton from "@/components/entries/DeleteEntryButton";
-import { getEntry, getNextEntry, getPreviousEntry } from "@/db/entry";
+import {
+  getEntryWithSummary,
+  getNextEntry,
+  getPreviousEntry,
+} from "@/db/entry";
 import { formatRelative } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,7 +15,7 @@ interface EntryPageProps {
 export default async function EntryPage({ params }: EntryPageProps) {
   const { entryId } = await params;
 
-  const entry = await getEntry(Number(entryId));
+  const entry = await getEntryWithSummary(Number(entryId));
 
   if (!entry) {
     notFound();
@@ -56,7 +60,7 @@ export default async function EntryPage({ params }: EntryPageProps) {
             href={`/entries/${previousEntry.id}`}
             className="btn btn-neutral btn-sm"
           >
-            « {previousEntry.EntrySummary?.title ?? "Previous entry"}
+            « Previous entry
           </Link>
         ) : (
           <span />
@@ -67,7 +71,7 @@ export default async function EntryPage({ params }: EntryPageProps) {
             href={`/entries/${nextEntry.id}`}
             className="btn btn-neutral btn-sm"
           >
-            {nextEntry.EntrySummary?.title ?? "Next entry"} »
+            Next Entry »
           </Link>
         ) : (
           <span />
