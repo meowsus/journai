@@ -20,12 +20,12 @@ export default function TarotCardPull({
   entryId,
   tarotCardPullId,
 }: Props) {
+  const tarotCardPullName = `${name} ${isReversed ? "(Reversed)" : ""}`;
+
   return (
     <div className="card w-96 bg-base-100 shadow-xl">
       <div className="card-body">
-        <h2 className="card-title">
-          {name} {isReversed && "(Reversed)"}
-        </h2>
+        <h2 className="card-title">{tarotCardPullName}</h2>
 
         <form action={removeTarotCardPullAction} className="inline">
           <input type="hidden" name="entryId" value={entryId} />
@@ -39,6 +39,7 @@ export default function TarotCardPull({
         <TarotMeaningModalButton
           entryId={entryId}
           tarotCardPullId={tarotCardPullId}
+          cardName={tarotCardPullName}
         />
 
         {impression ? (
