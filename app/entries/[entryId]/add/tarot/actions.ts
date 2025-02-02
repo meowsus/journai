@@ -1,6 +1,7 @@
 "use server";
 
 import { deleteTarotCardPull, updateTarotCardPull } from "@/db/tarotCardPull";
+import { updateTarotReading } from "@/db/tarotReading";
 import prisma from "@/prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -125,6 +126,30 @@ export const removeTarotCardPullAction = async (data: FormData) => {
   const { tarotCardPullId, entryId } = parsed.data;
 
   await deleteTarotCardPull(Number(tarotCardPullId));
+
+  revalidatePath(`/entries/${entryId}/add/tarot`);
+};
+
+const addImpressionToTarotReadingSchema = z.object({
+  entryId: z.string(),
+  tarotReadingId: z.string(),
+  impression: z.string(),
+});
+
+export const addImpressionToTarotReadingAction = async (data: FormData) => {
+  const formDataEntries = Object.fromEntries(data);
+
+  const parsed = addImpressionToTarotReadingSchema.safeParse(formDataEntries);
+
+  if (!parsed.success) {
+    throw new Error("Validation failed");
+  }
+
+  const { impression, entryId, tarotReadingId } = parsed.data;
+
+  await updateTarotReading(Number(tarotReadingId), {
+    impression,
+  });
 
   revalidatePath(`/entries/${entryId}/add/tarot`);
 };

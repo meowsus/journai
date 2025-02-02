@@ -1,3 +1,4 @@
+import { addImpressionToTarotReadingAction } from "@/app/entries/[entryId]/add/tarot/actions";
 import AddTarotCardPullForm from "@/app/entries/[entryId]/add/tarot/AddTarotCardPullForm";
 import TarotCardPull from "@/app/entries/[entryId]/add/tarot/TarotCardPull";
 import { getEntryWithFullTarotReading } from "@/db/entry";
@@ -45,7 +46,7 @@ export default async function AddTarotToEntryPage({ params }: Props) {
         {entry.TarotReading?.TarotCardPulls?.map((tarotCardPull) => (
           <TarotCardPull
             key={tarotCardPull.id}
-            name={tarotCardPull.TarotCard?.name}
+            tarotCardName={tarotCardPull.TarotCard?.name}
             isReversed={tarotCardPull.isReversed}
             impression={tarotCardPull.impression}
             entryId={entry.id}
@@ -58,6 +59,41 @@ export default async function AddTarotToEntryPage({ params }: Props) {
             entryId={entry.id}
             addedTarotCardIds={addedTarotCardIds}
           />
+        )}
+
+        {entry.TarotReading?.impression ? (
+          <p>
+            <strong>Impression:</strong> {entry.TarotReading?.impression}
+          </p>
+        ) : (
+          <form
+            action={addImpressionToTarotReadingAction}
+            className="flex flex-col gap-4"
+          >
+            <input type="hidden" name="entryId" value={entry.id} />
+            <input
+              type="hidden"
+              name="tarotReadingId"
+              value={entry.TarotReading?.id}
+            />
+
+            <label className="form-control w-full">
+              <div className="label">
+                <span className="label-text">Impression</span>
+              </div>
+              <textarea
+                name="impression"
+                placeholder="Type here"
+                className="textarea input-bordered w-full"
+              />
+            </label>
+
+            <div className="flex justify-end gap-2">
+              <button type="submit" className="btn btn-primary btn-sm">
+                Save
+              </button>
+            </div>
+          </form>
         )}
       </div>
     </div>

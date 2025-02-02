@@ -6,7 +6,7 @@ import {
 import TarotMeaningModalButton from "@/components/ModalButton/TarotMeaningModalButton";
 
 interface Props {
-  name?: string;
+  tarotCardName?: string;
   isReversed: boolean;
   impression?: string | null;
   entryId: number;
@@ -14,13 +14,13 @@ interface Props {
 }
 
 export default function TarotCardPull({
-  name,
+  tarotCardName,
   isReversed,
   impression,
   entryId,
   tarotCardPullId,
 }: Props) {
-  const tarotCardPullName = `${name} ${isReversed ? "(Reversed)" : ""}`;
+  const tarotCardPullName = `${tarotCardName} ${isReversed ? "(Reversed)" : ""}`;
 
   return (
     <div className="card w-96 bg-base-100 shadow-xl">
