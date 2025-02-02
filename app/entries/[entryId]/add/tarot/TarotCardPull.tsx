@@ -1,5 +1,8 @@
-import { removeTarotCardPullAction } from "@/app/entries/[entryId]/add/tarot/actions";
-import TarotPullImpressionModalButton from "@/components/ModalButton/TarotPullImpressionModalButton";
+import {
+  addImpressionToTarotCardPullAction,
+  removeTarotCardPullAction,
+} from "@/app/entries/[entryId]/add/tarot/actions";
+import GenerateTarotCardInterpretationButton from "@/components/GenerateTarotCardInterpretationButton";
 
 interface Props {
   tarotCardName?: string;
@@ -23,18 +26,46 @@ export default function TarotCardPull({
       <div className="card-body">
         <h2 className="card-title">{tarotCardPullName}</h2>
 
-        <p>
-          <strong>Impression:</strong> {impression || "None"}
-        </p>
+        {impression ? (
+          <p>
+            <strong>Impression:</strong> {impression}
+          </p>
+        ) : (
+          <>
+            <GenerateTarotCardInterpretationButton
+              cardName={tarotCardPullName}
+            />
 
-        <div className="card-actions justify-end">
-          <TarotPullImpressionModalButton
-            entryId={entryId}
-            tarotCardPullId={tarotCardPullId}
-            cardName={tarotCardPullName}
-            impression={impression}
-          />
-        </div>
+            <form
+              action={addImpressionToTarotCardPullAction}
+              className="flex flex-col gap-4"
+            >
+              <input type="hidden" name="entryId" value={entryId} />
+              <input
+                type="hidden"
+                name="tarotCardPullId"
+                value={tarotCardPullId}
+              />
+
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Impression</span>
+                </div>
+                <textarea
+                  name="impression"
+                  placeholder="What's your impression of this card?"
+                  className="textarea input-bordered w-full"
+                />
+              </label>
+
+              <div className="flex justify-end gap-2">
+                <button type="submit" className="btn btn-neutral btn-sm">
+                  Save impression
+                </button>
+              </div>
+            </form>
+          </>
+        )}
       </div>
 
       <form

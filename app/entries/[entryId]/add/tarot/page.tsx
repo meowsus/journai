@@ -83,7 +83,7 @@ export default async function AddTarotToEntryPage({ params }: Props) {
               </div>
               <textarea
                 name="impression"
-                placeholder="Type here"
+                placeholder="What is your overall impression of this tarot reading?"
                 className="textarea input-bordered w-full"
               />
             </label>
