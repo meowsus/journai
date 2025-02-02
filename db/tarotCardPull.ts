@@ -8,3 +8,19 @@ export const createTarotCardPull = async (
     data,
   });
 };
+
+export const updateTarotCardPull = async (
+  id: number,
+  data: Prisma.TarotCardPullUpdateInput,
+) => {
+  return await prisma.tarotCardPull.update({
+    where: { id },
+    data,
+  });
+};
+
+export const deleteTarotCardPull = async (id: number) => {
+  return await prisma.tarotCardPull.delete({
+    where: { id },
+  });
+};

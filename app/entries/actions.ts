@@ -1,7 +1,6 @@
 "use server";
 
 import { deleteEntry, updateEntry } from "@/db/entry";
-import prisma from "@/prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -56,54 +55,3 @@ export async function publishEntryAction(entryId: number) {
     return { error: "Failed to publish entry" };
   }
 }
-
-const createTarotPullFormDataSchema = z.object({
-  tarotCardId: z.string().nonempty(),
-  isReversed: z.string().optional(),
-  entryId: z.string(),
-});
-
-export const createTarotCardPullAction = async (data: FormData) => {
-  const formDataEntries = Object.fromEntries(data);
-  const parsed = createTarotPullFormDataSchema.safeParse(formDataEntries);
-
-  if (!parsed.success) {
-    throw new Error("Validation failed");
-  }
-
-  const { tarotCardId, isReversed, entryId } = parsed.data;
-
-  // Ensure the TarotReading exists
-  const tarotReading = await prisma.tarotReading.upsert({
-    where: {
-      entryId: Number(entryId),
-    },
-    update: {},
-    create: {
-      Entry: {
-        connect: {
-          id: Number(entryId),
-        },
-      },
-    },
-  });
-
-  // Add the TarotCardPull to the existing TarotReading
-  await prisma.tarotCardPull.create({
-    data: {
-      TarotReading: {
-        connect: {
-          id: tarotReading.id,
-        },
-      },
-      TarotCard: {
-        connect: {
-          id: Number(tarotCardId),
-        },
-      },
-      isReversed: isReversed === "on",
-    },
-  });
-
-  revalidatePath(`/entries/${entryId}/add/tarot`);
-};

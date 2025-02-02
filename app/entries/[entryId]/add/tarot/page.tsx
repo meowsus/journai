@@ -47,6 +47,9 @@ export default async function AddTarotToEntryPage({ params }: Props) {
             key={tarotCardPull.id}
             name={tarotCardPull.TarotCard?.name}
             isReversed={tarotCardPull.isReversed}
+            impression={tarotCardPull.impression}
+            entryId={entry.id}
+            tarotCardPullId={tarotCardPull.id}
           />
         ))}
 

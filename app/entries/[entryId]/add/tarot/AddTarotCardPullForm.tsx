@@ -1,4 +1,4 @@
-import { createTarotCardPullAction } from "@/app/entries/actions";
+import { createTarotCardPullAction } from "@/app/entries/[entryId]/add/tarot/actions";
 import { getTarotCardsWithoutIds } from "@/db/tarotCard";
 
 interface Props {
