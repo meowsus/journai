@@ -63,7 +63,7 @@ const createTarotPullFormDataSchema = z.object({
   entryId: z.string(),
 });
 
-export const createTarotPullAction = async (data: FormData) => {
+export const createTarotCardPullAction = async (data: FormData) => {
   const formDataEntries = Object.fromEntries(data);
   const parsed = createTarotPullFormDataSchema.safeParse(formDataEntries);
 

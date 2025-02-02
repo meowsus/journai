@@ -35,6 +35,9 @@ export const getEntryWithFullTarotReading = async (id: number) => {
             include: {
               TarotCard: true,
             },
+            orderBy: {
+              createdAt: "asc",
+            },
           },
         },
       },
