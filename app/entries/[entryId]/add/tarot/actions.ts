@@ -59,7 +59,7 @@ export const createTarotCardPullAction = async (data: FormData) => {
 const addImpressionToTarotCardPullFormDataSchema = z.object({
   tarotCardPullId: z.string(),
   entryId: z.string(),
-  impression: z.string().nonempty(),
+  impression: z.string(),
 });
 
 export const addImpressionToTarotCardPullAction = async (data: FormData) => {
@@ -69,6 +69,7 @@ export const addImpressionToTarotCardPullAction = async (data: FormData) => {
     addImpressionToTarotCardPullFormDataSchema.safeParse(formDataEntries);
 
   if (!parsed.success) {
+    console.log(parsed.error.issues);
     throw new Error("Validation failed");
   }
 

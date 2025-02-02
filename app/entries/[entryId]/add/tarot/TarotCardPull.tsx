@@ -3,6 +3,7 @@ import {
   removeImpressionFromTarotCardPullAction,
   removeTarotCardPullAction,
 } from "@/app/entries/[entryId]/add/tarot/actions";
+import TarotMeaningModalButton from "@/components/ModalButton/TarotMeaningModalButton";
 
 interface Props {
   name?: string;
@@ -34,6 +35,11 @@ export default function TarotCardPull({
             Remove card?
           </button>
         </form>
+
+        <TarotMeaningModalButton
+          entryId={entryId}
+          tarotCardPullId={tarotCardPullId}
+        />
 
         {impression ? (
           <>
