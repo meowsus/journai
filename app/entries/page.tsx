@@ -76,40 +76,44 @@ export default async function EntriesPage({ searchParams }: EntriesPageProps) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex justify-between gap-2">
-        <h1 className="mb-2 text-4xl">
-          Entries for {formatDate(startsAt, "MMMM yyyy")}
-        </h1>
-      </div>
+    <div className="flex flex-col gap-4">
+      <header className="grid grid-cols-3 items-center justify-between gap-2">
+        <div>
+          <Link
+            href={{
+              pathname: "/entries",
+              query: {
+                startsAt: sub(startsAt, { months: 1 }).toISOString(),
+                endsAt: sub(endsAt, { months: 1 }).toISOString(),
+              },
+            }}
+            className="btn btn-ghost btn-sm"
+          >
+            « Previous month
+          </Link>
+        </div>
 
-      <Link
-        href={{
-          pathname: "/entries",
-          query: {
-            startsAt: sub(startsAt, { months: 1 }).toISOString(),
-            endsAt: sub(endsAt, { months: 1 }).toISOString(),
-          },
-        }}
-        className="btn btn-ghost btn-sm"
-      >
-        Previous month
-      </Link>
+        <h1 className="mb-2 text-center text-4xl">
+          {formatDate(startsAt, "MMMM yyyy")}
+        </h1>
+
+        <div className="text-right">
+          <Link
+            href={{
+              pathname: "/entries",
+              query: {
+                startsAt: add(startsAt, { months: 1 }).toISOString(),
+                endsAt: add(endsAt, { months: 1 }).toISOString(),
+              },
+            }}
+            className="btn btn-ghost btn-sm"
+          >
+            Next month »
+          </Link>
+        </div>
+      </header>
 
       <EntriesTimeline entries={entries} />
-
-      <Link
-        href={{
-          pathname: "/entries",
-          query: {
-            startsAt: add(startsAt, { months: 1 }).toISOString(),
-            endsAt: add(endsAt, { months: 1 }).toISOString(),
-          },
-        }}
-        className="btn btn-ghost btn-sm"
-      >
-        Next month
-      </Link>
     </div>
   );
 }
