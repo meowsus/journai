@@ -27,12 +27,14 @@ interface Props {
   tarotCardPullId: number;
   entryId: number;
   cardName: string;
+  impression?: string | null;
 }
 
-export default function TarotMeaningModalButton({
+export default function TarotPullImpressionModalButton({
   tarotCardPullId,
   entryId,
   cardName,
+  impression,
 }: Props) {
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -55,8 +57,9 @@ export default function TarotMeaningModalButton({
   return (
     <ModalButton
       modalId={`impression-${tarotCardPullId}`}
-      buttonText="View Card Meaning"
+      buttonText="Add Impression"
       modalTitle="Add Impression"
+      className="btn btn-neutral btn-sm"
     >
       <>
         <button
@@ -103,7 +106,7 @@ export default function TarotMeaningModalButton({
               {pending && (
                 <span className="loading loading-spinner loading-md"></span>
               )}
-              Add impression
+              {impression ? "Update" : "Save"} impression
             </button>
           </div>
         </form>

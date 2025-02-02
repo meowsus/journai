@@ -75,7 +75,7 @@ export default function Header() {
         </div>
         <div className="navbar-end">
           <div className="flex items-center gap-2 pr-4">
-            <Link href="/entries/new" className="btn btn-primary btn-sm">
+            <Link href="/entries/new" className="btn btn-neutral btn-sm">
               New Entry
             </Link>
           </div>

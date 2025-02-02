@@ -34,32 +34,32 @@ export default async function AddTarotToEntryPage({ params }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="flex items-center justify-between gap-2 text-4xl">
+      <h1 className="flex items-center justify-center gap-2 text-4xl">
         Add Tarot to New Entry
       </h1>
 
-      <p>
-        <strong>Content:</strong> {entry.content}
-      </p>
+      <p className="text-center">{entry.content}</p>
 
       <div className="flex flex-col gap-4">
-        {entry.TarotReading?.TarotCardPulls?.map((tarotCardPull) => (
-          <TarotCardPull
-            key={tarotCardPull.id}
-            tarotCardName={tarotCardPull.TarotCard?.name}
-            isReversed={tarotCardPull.isReversed}
-            impression={tarotCardPull.impression}
-            entryId={entry.id}
-            tarotCardPullId={tarotCardPull.id}
-          />
-        ))}
+        <div className="grid grid-cols-3 gap-4">
+          {entry.TarotReading?.TarotCardPulls?.map((tarotCardPull) => (
+            <TarotCardPull
+              key={tarotCardPull.id}
+              tarotCardName={tarotCardPull.TarotCard?.name}
+              isReversed={tarotCardPull.isReversed}
+              impression={tarotCardPull.impression}
+              entryId={entry.id}
+              tarotCardPullId={tarotCardPull.id}
+            />
+          ))}
 
-        {remainingPulls > 0 && (
-          <AddTarotCardPullForm
-            entryId={entry.id}
-            addedTarotCardIds={addedTarotCardIds}
-          />
-        )}
+          {remainingPulls > 0 && (
+            <AddTarotCardPullForm
+              entryId={entry.id}
+              addedTarotCardIds={addedTarotCardIds}
+            />
+          )}
+        </div>
 
         {entry.TarotReading?.impression ? (
           <p>

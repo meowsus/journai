@@ -26,7 +26,7 @@ export default async function NewEntryPage() {
 
   return (
     <form action={createEntryAction} className="flex flex-col gap-4">
-      <h1 className="flex items-center justify-between gap-2 text-4xl">
+      <h1 className="flex items-center justify-center gap-2 text-4xl">
         Add New Entry
       </h1>
 
@@ -38,8 +38,9 @@ export default async function NewEntryPage() {
         <textarea
           name="content"
           required={true}
-          placeholder="Type here"
+          placeholder="Write about anything and everything that's on your mind..."
           className="textarea input-bordered w-full"
+          rows={10}
         />
       </label>
 

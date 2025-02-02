@@ -16,7 +16,7 @@ export default async function AddTarotCardPullForm({
     <form action={createTarotCardPullAction}>
       <input type="hidden" name="entryId" value={entryId} />
 
-      <div className="card w-96 bg-base-100 shadow-xl">
+      <div className="card w-full bg-base-100 shadow-xl">
         <div className="card-body">
           <label className="form-control w-full max-w-xs">
             <div className="label">
@@ -51,8 +51,8 @@ export default async function AddTarotCardPullForm({
           </div>
 
           <div className="card-actions justify-end">
-            <button type="submit" className="btn btn-primary">
-              Add Tarot Pull
+            <button type="submit" className="btn btn-primary btn-sm">
+              Add Card to Reading
             </button>
           </div>
         </div>
